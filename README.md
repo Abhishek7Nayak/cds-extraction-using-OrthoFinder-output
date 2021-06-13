@@ -8,16 +8,16 @@ The orthgroups directory contains a file called Orthogroups_SingleCopyOrthologue
 $ i=$(cat Orthogroups_SingleCopyOrthologues.txt | xargs )
  $ for j in $i; do grep "$j" Orthogroups.tsv | awk '{for (i=2; i<=NF; i++) print $i}'> $j.txt; done;
 ```
-The above command uses the orthogroups names and prints all the protein IDs of the respective orthogroups and saves them into a text file. These CDS sequences can be now downloaded from NCBI further changing the headers of the sequences to their respective protein IDs.
+The above command uses the orthogroups names and prints all the protein IDs of the respective orthogroups and saves them into a text file. These CDS can be now downloaded from NCBI further changing the headers of the sequences to their respective protein IDs.
 
-### Example for RefSeq ids and Ensemble ids
+### Example for RefSeq ids and Ensemble IDs
 ```
  sed 's/ /_/g' GCF_014176215.1_mRouAeg1.p_cds_from_genomic.fna  | sed 's/\(>\).*_\[protein_id=/\1/g' | sed 's/\].*$//g' | awk '{ if ($1 ~ /^>/)  print $0 "_Rousettus_aegyptiacus ";  else print $0; }' 
 ```
 ```
 sed 's/ /_/g' Equus_caballus.EquCab3.0.cds.all.fa | sed '/>/s/\(>\).*[0-9]_gene:/\1/g' | sed 's/\_.*$//g' | awk '{ if ($1 ~ /^>/)  print $0 "_Equus_caballus";  else print $0; }' 
 ```
-### Now merge all the CDS sequences in to a single file
+### Now merge all the CDS in to a single file
 ```
 cat * > all_cds_seq.faa
 ```
