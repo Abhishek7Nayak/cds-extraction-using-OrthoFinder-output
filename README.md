@@ -1,37 +1,30 @@
-## Welcome to GitHub Pages
+## CDS extraction
 
-You can use the [editor on GitHub](https://github.com/Abhishek7Nayak/cds-extraction-using-OrthoFinder-output/edit/main/README.md) to maintain and preview the content for your website in Markdown files.
+To perform positive selection analysis tools such as HyPhy , PAML requires a codon alignment file of single copy orthologs. So the below strategy can be used to extract the CDS sequences using orthofinder results and perform further analysis.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+The orthgroups directory contains a file called Orthogroups_SingleCopyOrthologues.txt and also Orthogroups.tsv These two files can be used to extract the CDS sequences.
 
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
+``` 
+$ i=$(cat Orthogroups_SingleCopyOrthologues.txt | xargs )
+ $ for j in $i; do grep "$j" Orthogroups.tsv | awk '{for (i=2; i<=NF; i++) print $i}'> $j.txt; done;
 ```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/Abhishek7Nayak/cds-extraction-using-OrthoFinder-output/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+The above command uses the orthogroups names and prints all the protein ids of those orthogroups and saves them into a text file. 
+Now the CDS sequences can be downloaded from ncbi and headers of the sequences should be changed to the protein id.
+### Example for RefSeq ids and Ensemble ids
+```
+ sed 's/ /_/g' GCF_014176215.1_mRouAeg1.p_cds_from_genomic.fna  | sed 's/\(>\).*_\[protein_id=/\1/g' | sed 's/\].*$//g' | awk '{ if ($1 ~ /^>/)  print $0 "_Rousettus_aegyptiacus ";  else print $0; }' 
+```
+```
+sed 's/ /_/g' Equus_caballus.EquCab3.0.cds.all.fa | sed '/>/s/\(>\).*[0-9]_gene:/\1/g' | sed 's/\_.*$//g' | awk '{ if ($1 ~ /^>/)  print $0 "_Equus_caballus";  else print $0; }' 
+```
+### Now merge all the CDS sequences in to a single file
+```
+cat * > all_cds_seq.faa
+```
+Seqkit grep can be used to extract the fasta sequences from a fasta file using a text file which contains the fasta headers. Here the text file is the one which contains all the protein ids which was created in the previous step.
+```
+for txt_file in $(ls *.txt); do seqkit grep -f $txt_file all_cds_seq.fa -o $txt_file.fa; done;
+```
+The final orthogroup fasta files contain all the CDNA sequences of the proteins.
+These cDNA containing orthogroups can be used for further analysis such as alignment using PRANK and filtering using GBlocks and further positive selection analysis using HyPhy or PAML.
+ 
