@@ -10,7 +10,7 @@ $ i=$(cat Orthogroups_SingleCopyOrthologues.txt | xargs )
 ```
 The above command uses the orthogroups names and prints all the protein IDs of the respective orthogroups and saves them into a text file. These CDS can be now downloaded from NCBI further changing the headers of the sequences to their respective protein IDs.
 
-### Example for RefSeq ids and Ensemble IDs
+### Example for RefSeq IDs and Ensemble IDs
 ```
  sed 's/ /_/g' GCF_014176215.1_mRouAeg1.p_cds_from_genomic.fna  | sed 's/\(>\).*_\[protein_id=/\1/g' | sed 's/\].*$//g' | awk '{ if ($1 ~ /^>/)  print $0 "_Rousettus_aegyptiacus ";  else print $0; }' 
 ```
