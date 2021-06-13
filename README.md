@@ -17,7 +17,7 @@ The above command uses the orthogroups names and prints all the protein IDs of t
 ```
 sed 's/ /_/g' Equus_caballus.EquCab3.0.cds.all.fa | sed '/>/s/\(>\).*[0-9]_gene:/\1/g' | sed 's/\_.*$//g' | awk '{ if ($1 ~ /^>/)  print $0 "_Equus_caballus";  else print $0; }' 
 ```
-### Now merge all the CDS in to a single file
+### Merge all the CDS in to a single file
 ```
 cat * > all_cds_seq.faa
 ```
