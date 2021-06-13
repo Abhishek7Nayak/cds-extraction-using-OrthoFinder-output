@@ -1,8 +1,8 @@
 ## CDS extraction
 
-Tools such as HyPhy, PAML can be used for performing positive selection analysis but they require a codon alignment file of the respective single copy orthologs. Hence, the below strategy can be used to extract the cDNA sequences using OrthoFinder results and perform further analysis.
+Tools such as HyPhy, PAML can be used for performing positive selection analysis but they require a codon alignment file of the respective single copy orthologs. Hence, the below strategy can be used to extract the CDS using OrthoFinder results and perform further analysis.
 
-The orthgroups directory contains a file called Orthogroups_SingleCopyOrthologues.txt and also Orthogroups.tsv These two files can be used to extract the CDS sequences.
+The orthgroups directory contains a file called Orthogroups_SingleCopyOrthologues.txt and also Orthogroups.tsv These two files can be used to extract the CDS.
 
 ``` 
 $ i=$(cat Orthogroups_SingleCopyOrthologues.txt | xargs )
